@@ -1,13 +1,19 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+
+export interface FactsModel {
+  readonly fact: string;
+  }
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [HttpClientModule, AsyncPipe],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'mentoring-program-starter-kit';
+  httpClient: HttpClient = inject(HttpClient); 
+  data$: Observable<FactsModel> = this.httpClient.get<FactsModel>('https://catfact.ninja/fact');
 }
